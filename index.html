@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>St. Louis Feature Layers with Layer List | ArcGIS Maps SDK for JavaScript 4.28</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.28/"></script>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/LayerList" // Include the LayerList module
+    ], (Map, MapView, FeatureLayer, LayerList) => {
+      const map = new Map({
+        basemap: "hybrid"
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [-90.1994, 38.6270],
+        zoom: 12
+      });
+
+      const wardsLayer = new FeatureLayer({
+        url: "https://services2.arcgis.com/bB9Y1bGKerz1PTl5/arcgis/rest/services/wards_stl/FeatureServer/0",
+        popupTemplate: {
+          title: "Ward {WARD}",
+          content: "One of the STL wards."
+        }
+      });
+
+      const roadsLayer = new FeatureLayer({
+        url: "https://services2.arcgis.com/bB9Y1bGKerz1PTl5/arcgis/rest/services/roads_stl/FeatureServer/0",
+        popupTemplate: {
+          title: "Road: {FULLNAME}",
+          content: "Road ID: {LINEARID}"
+        }
+      });
+
+      map.add(wardsLayer);
+      map.add(roadsLayer);
+
+      // Add the LayerList widget
+      const layerList = new LayerList({
+        view: view
+      });
+
+      
+      view.ui.add(layerList, {
+        position: "top-right"
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
